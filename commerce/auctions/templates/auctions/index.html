@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block title %}Active Listings{% endblock %}
+
+{% block body %}
+    {% if listings %}
+        <div class="listings-container">
+            {% for listing in listings %}
+                {% include "auctions/items.html" with listing=listing %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="listings-container">
+            <div class="listing-item">
+                <div class="listing-content">
+                    <p>There are no active listings</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

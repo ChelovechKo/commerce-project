@@ -1,0 +1,120 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block title %}{{ listing.name }}{% endblock %}
+
+{% block body %}
+   <div class="listings-container">
+        <div class="listing-item">
+            <!-- Listing Content: Image and Info -->
+
+            <div class="listing-content">
+                {% if not listing.is_active %}
+                    {% if user == listing.user_win %}
+                        <span class="h3 font-weight-bold text-success">Congratulations! You won this auction!</span>
+                    {% else %}
+                        <span class="h3 font-weight-bold text-danger">This auction is closed.</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="listing-content">
+                <!-- Image -->
+                <div class="image-container">
+                    {% if listing.img %}
+                        <img src="{{ listing.img.url }}" alt="{{ listing.name }}">
+                    {% else %}
+                        <img src="{% static 'no_image.png' %}" alt="No picture">
+                    {% endif %}
+                </div>
+
+                <!-- Listing Information -->
+                <div class="listing-info">
+                    <!-- Title -->
+                    <div>
+                        {% if user.is_authenticated and listing.is_active%}
+                            {% if is_watchlisted %}
+                                <a href="{% url 'remove_from_watchlist' listing.id %}" class="text-decoration-none">
+                                    <img src="{% static 'watchlist_filled_icon.png' %}" alt="remove">
+                                </a>
+                            {% else %}
+                                <a href="{% url 'add_to_watchlist' listing.id %}" class="text-decoration-none">
+                                    <img src="{% static 'watchlist_empty_icon.png' %}" alt="add">
+                                </a>
+                            {% endif %}
+                        {% endif %}
+
+                        <span class="h3 font-weight-bold align-middle">{{ listing.name }}</span>
+
+                        {% if listing.category %}
+                            <a href="{% url 'filtered_category' listing.category.id %}" class="btn_stl" style="transform: scale(0.7);">
+                                {{ listing.category.name }}
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <p style="font-size: 0.8em;">{{ listing.description }}</p>
+
+                    <p>Price: {{ listing.price}} <img src="{% static 'septim.png' %}" alt="Septim"></p>
+
+                    <!-- Bids Section -->
+                    {% if listing.is_active %}
+                        {% if user.is_authenticated %}
+                            {% if listing.user_create == user %}
+                                <form method="post" action="{% url 'close_auction' listing.id %}" class="mb-3">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn_stl mt-2">Close Auction</button>
+                                </form>
+                            {% endif %}
+                            <p>{{ bid_count }} bid(s) so far. {{ message }}</p>
+                        {% else %}
+                            <p>{{ bid_count }} bid(s) so far. Please <a href="{% url 'login' %}">log in</a> to place bids.</p>
+                        {% endif %}
+
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'listing_page' listing.id %}" class="d-flex align-items-center">
+                                {% csrf_token %}
+                                <input class="form-control" type="number" name="bid_price" step="1" min="{{ max_price|add:"0" }}"
+                                       placeholder="{{ max_price|add:"0" }}" required>
+                                <button type="submit" class="btn_stl" style="transform: scale(0.8);">Place Bid</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+
+                    <span>Details</span>
+                    <ul style="font-size: 0.8em;">
+                      <li>Created: {{ listing.date_create }}</li>
+                      <li>Created by: {{ listing.user_create }}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="listing-content">
+                <!-- Comments Section -->
+                <div class="listing-comments">
+                    <span class="h3 font-weight-bold align-middle">Comments</span>
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_comment' listing.id %}">
+                            {% csrf_token %}
+                            <textarea name="comment_text" rows="3" placeholder="Add your comment here..." required></textarea>
+                            <button type="submit" class="btn_stl">Post Comment</button>
+                        </form>
+                    {% else %}
+                        <p>Please <a href="{% url 'login' %}">log in</a> to post comments.</p>
+                    {% endif %}
+
+                    <div class="comments-list mt-3">
+                        {% for comment in comments %}
+                            <div class="comment-item">
+                                <p style="font-size: 0.8em;">{{ comment.user.username }} — {{ comment.create_date|date:"M d, Y H:i" }}</p>
+                                <p class="ml-3">{{ comment.description }}</p>
+                                <hr>
+                            </div>
+                        {% empty %}
+                            <p>No comments yet. Be the first to comment!</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+{% endblock %}

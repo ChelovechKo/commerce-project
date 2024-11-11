@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+    <div class="categories-container">
+        <div class="category-buttons">
+            <a href="{% url 'categories' %}" class="btn_stl m-1 {% if not selected_category %}active{% endif %}">
+                All Listings
+            </a>
+            {% for category in categories %}
+                <a href="{% url 'filtered_category' category.id %}" class="btn_stl m-1 {% if selected_category == category %}active{% endif %}">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="listings-container">
+        {% if listings %}
+            {% for listing in listings %}
+                {% include "auctions/items.html" with listing=listing %}
+            {% endfor %}
+        {% else %}
+            <div class="listings-container">
+                <div class="listing-item">
+                    <div class="listing-content">
+                        <p>No listings available in this category.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

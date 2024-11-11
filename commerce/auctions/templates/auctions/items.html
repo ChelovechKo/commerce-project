@@ -1,0 +1,43 @@
+{% load static %}
+
+<div class="listing-item">
+    <div class="listing-content">
+
+        <div class="image-container">
+            {% if listing.img %}
+                <img src="{{ listing.img.url }}" alt="{{ listing.name }}">
+            {% else %}
+                <img src="{% static 'no_image.png' %}" alt="No picture">
+            {% endif %}
+        </div>
+
+        <div class="listing-info">
+            <div>
+                <span class="h3 font-weight-bold align-middle">
+                     <a href="{% url 'listing_page' listing.id %}">{{ listing.name }}</a>
+                </span>
+
+                {% if listing.category %}
+                    <a href="{% url 'filtered_category' listing.category.id %}" class="btn_stl" style="transform: scale(0.7);">
+                        {{ listing.category.name }}
+                    </a>
+                {% endif %}
+            </div>
+
+            <p style="font-size: 0.8em;">
+                <span class = "description-text">
+                    {{ listing.description|slice:":60"}}...
+                </span>
+                <span><a href="{% url 'listing_page' listing.id %}" class="align-middle" style="font-size: 0.8em;">read more</a></span>
+            </p>
+
+            <p>Price: {{ listing.price}} <img src="{% static 'septim.png' %}" alt="Septim"></p>
+
+            <span><u>Details</u></span>
+                    <ul style="font-size: 0.8em;">
+                      <li>Created: {{ listing.date_create }}</li>
+                      <li>Created by: {{ listing.user_create }}</li>
+                    </ul>
+        </div>
+    </div>
+</div>
