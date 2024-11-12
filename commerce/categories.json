@@ -1,13 +1,13 @@
 [
-    {"model": "commerce.category", "pk": 1, "fields": {"name": "Armors"}},
-    {"model": "commerce.category", "pk": 2, "fields": {"name": "Weapons"}},
-    {"model": "commerce.category", "pk": 3, "fields": {"name": "Books"}},
-    {"model": "commerce.category", "pk": 4, "fields": {"name": "Potions"}},
-    {"model": "commerce.category", "pk": 5, "fields": {"name": "Food"}},
-    {"model": "commerce.category", "pk": 6, "fields": {"name": "Ingredients"}},
-    {"model": "commerce.category", "pk": 7, "fields": {"name": "Keys"}},
-    {"model": "commerce.category", "pk": 8, "fields": {"name": "Scrolls"}},
-    {"model": "commerce.category", "pk": 9, "fields": {"name": "Jewelry"}},
-    {"model": "commerce.category", "pk": 10, "fields": {"name": "Clothing"}},
-    {"model": "commerce.category", "pk": 11, "fields": {"name": "Shields"}}
+    {"model": "auctions.category", "pk": 1, "fields": {"name": "Armors"}},
+    {"model": "auctions.category", "pk": 2, "fields": {"name": "Weapons"}},
+    {"model": "auctions.category", "pk": 3, "fields": {"name": "Books"}},
+    {"model": "auctions.category", "pk": 4, "fields": {"name": "Potions"}},
+    {"model": "auctions.category", "pk": 5, "fields": {"name": "Food"}},
+    {"model": "auctions.category", "pk": 6, "fields": {"name": "Ingredients"}},
+    {"model": "auctions.category", "pk": 7, "fields": {"name": "Keys"}},
+    {"model": "auctions.category", "pk": 8, "fields": {"name": "Scrolls"}},
+    {"model": "auctions.category", "pk": 9, "fields": {"name": "Jewelry"}},
+    {"model": "auctions.category", "pk": 10, "fields": {"name": "Clothing"}},
+    {"model": "auctions.category", "pk": 11, "fields": {"name": "Shields"}}
 ]
