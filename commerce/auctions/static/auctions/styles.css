@@ -208,6 +208,8 @@ textarea:focus {
 
 .listing-item {
     min-height: 400px;
+    min-width: 800px;
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -222,7 +224,7 @@ textarea:focus {
 .listing-detailed-item {
     min-height: 400px;
     min-width: 900px;
-    max-width: 1300px;
+    max-width: 1100px;
     display: flex;
     flex-direction: column;
     justify-content: start;

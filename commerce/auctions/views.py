@@ -65,10 +65,17 @@ def signup_view(request):
 def index(request):
     '''Displays all active listings'''
     active_listings = Listing.objects.filter(is_active=True)
+    watchlisted_ids = []
+    expanded_listing_ids = request.session.get('expanded_listing_ids', [])
+
+    if request.user.is_authenticated:
+        watchlisted_ids = request.user.watchlist.values_list('listing_id', flat=True)
 
     return render(request, "auctions/index.html", {
         "active_tab": "active_listings",
         "listings": active_listings,
+        "watchlisted_ids": watchlisted_ids,
+        "expanded_listing_ids": expanded_listing_ids,
     })
 
 def categories_view(request, category_id=None):
@@ -93,15 +100,14 @@ def categories_view(request, category_id=None):
 
 def watchlist_view(request):
     '''Displays listings that the user has added to their watchlist'''
-    watchlist_listings = Listing.objects.none()
-    if request.user.is_authenticated:
-        watchlist_entries = Watchlist.objects.filter(user=request.user)
-        listing_ids = [entry.listing.id for entry in watchlist_entries]
-        watchlist_listings = Listing.objects.filter(id__in=listing_ids)
+    watchlisted_listings = Listing.objects.filter(watchlisted_by__user=request.user)
+    watchlisted_ids = watchlisted_listings.values_list('id', flat=True)
+    expanded_listing_ids = request.session.get('expanded_listing_ids', [])
 
     return render(request, "auctions/watchlist.html", {
-        "active_tab": "watchlist",
-        "listings": watchlist_listings,
+        "listings": watchlisted_listings,
+        "watchlisted_ids": watchlisted_ids,
+        "expanded_listing_ids": expanded_listing_ids,
     })
 
 def create_listing_view(request):
@@ -130,6 +136,7 @@ def create_listing_view(request):
 def listing_page_view(request, listing_id):
     '''Detailed Listing info'''
     listing = get_object_or_404(Listing, id=listing_id)
+
     bid_count = listing.bids.all().count() - 1
     last_bid = listing.bids.all().latest('create_date')
 
@@ -137,15 +144,15 @@ def listing_page_view(request, listing_id):
     comments = listing.comments.order_by('-create_date')
 
     if request.user.is_authenticated:
-        is_watchlisted = Watchlist.objects.filter(user=request.user, listing=listing).exists()
+        is_watchlisted = listing.watchlisted_by.filter(user=request.user).exists()
 
     #message for user
     if bid_count == 0:
         message = 'Place the first bid.'
     elif last_bid.user == request.user:
-        message = 'Your bid is the current bid.'
+        message = 'The current bid is yours.'
     else:
-        message = 'The current bid is not yours. Place your bid.'
+        message = f'The current bid belongs to {last_bid.user}.'
 
     # Проверка на отправку формы ставки
     if request.method == "POST":
@@ -176,13 +183,15 @@ def listing_page_view(request, listing_id):
 def add_to_watchlist_view(request, listing_id):
     listing = get_object_or_404(Listing, id=listing_id)
     Watchlist.objects.get_or_create(user=request.user, listing=listing)
-    return redirect('listing_page', listing_id=listing_id)
+    next_url = request.GET.get('next')
+    return redirect(next_url) if next_url else redirect(reverse("index"))
 
 @login_required
 def remove_from_watchlist_view(request, listing_id):
     listing = get_object_or_404(Listing, id=listing_id)
     Watchlist.objects.filter(user=request.user, listing=listing).delete()
-    return redirect('listing_page', listing_id=listing_id)
+    next_url = request.GET.get('next')
+    return redirect(next_url) if next_url else redirect(reverse("index"))
 
 
 @login_required
@@ -214,3 +223,14 @@ def close_auction_view(request, listing_id):
     listing.save()
 
     return redirect('listing_page', listing_id=listing.id)
+
+def expand_description_view(request, listing_id):
+    expanded_ids = request.session.get('expanded_listing_ids', [])
+    if listing_id not in expanded_ids:
+        expanded_ids.append(listing_id)
+    else:
+        expanded_ids.remove(listing_id)
+
+    request.session['expanded_listing_ids'] = expanded_ids
+    next_url = request.GET.get('next')
+    return redirect(next_url) if next_url else redirect(reverse("index"))

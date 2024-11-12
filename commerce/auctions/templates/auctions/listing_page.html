@@ -32,20 +32,25 @@
 
                 <!-- Listing Information -->
                 <div class="listing-info">
-                    <!-- Title -->
-                    <div>
+                    <!-- Watchlist -->
+                    <div class="d-flex justify-content-end" style="font-size: 0.8em;">
                         {% if user.is_authenticated and listing.is_active%}
                             {% if is_watchlisted %}
-                                <a href="{% url 'remove_from_watchlist' listing.id %}" class="text-decoration-none">
+                                Remove from your watchlist
+                                <a href="{% url 'remove_from_watchlist' listing.id %}" class="text-decoration-none ml-1">
                                     <img src="{% static 'watchlist_filled_icon.png' %}" alt="remove">
                                 </a>
                             {% else %}
-                                <a href="{% url 'add_to_watchlist' listing.id %}" class="text-decoration-none">
+                                Add to your watchlist
+                                <a href="{% url 'add_to_watchlist' listing.id %}" class="text-decoration-none ml-1">
                                     <img src="{% static 'watchlist_empty_icon.png' %}" alt="add">
                                 </a>
                             {% endif %}
                         {% endif %}
+                    </div>
 
+                    <!-- Title -->
+                    <div>
                         <span class="h3 font-weight-bold align-middle">{{ listing.name }}</span>
 
                         {% if listing.category %}
@@ -61,28 +66,30 @@
 
                     <!-- Bids Section -->
                     {% if listing.is_active %}
+                        {{ bid_count }} bid(s) so far.
                         {% if user.is_authenticated %}
+                            {{ message }}
+                            <!-- if owner -->
                             {% if listing.user_create == user %}
-                                <form method="post" action="{% url 'close_auction' listing.id %}" class="mb-3">
+                                <form method="post" action="{% url 'close_auction' listing.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn_stl mt-2">Close Auction</button>
+                                    <button type="submit" class="btn_stl" style="transform: scale(0.9);">Close Auction</button>
                                 </form>
-                            {% endif %}
-                            <p>{{ bid_count }} bid(s) so far. {{ message }}</p>
-                        {% else %}
-                            <p>{{ bid_count }} bid(s) so far. Please <a href="{% url 'login' %}">log in</a> to place bids.</p>
-                        {% endif %}
-
-                        {% if user.is_authenticated %}
-                            <form method="post" action="{% url 'listing_page' listing.id %}" class="d-flex align-items-center">
+                            <!-- if not owner -->
+                            {% else %}
+                                <form method="post" action="{% url 'listing_page' listing.id %}" class="d-flex align-items-center">
                                 {% csrf_token %}
                                 <input class="form-control" type="number" name="bid_price" step="1" min="{{ max_price|add:"0" }}"
                                        placeholder="{{ max_price|add:"0" }}" required>
-                                <button type="submit" class="btn_stl" style="transform: scale(0.8);">Place Bid</button>
+                                <button type="submit" class="btn_stl" style="transform: scale(0.9);">Place Bid</button>
                             </form>
+                            {% endif %}
+                        {% else %}
+                            Return to your path <a href="{% url 'login' %}">here</a> to place bids.
                         {% endif %}
                     {% endif %}
 
+                    <!-- Details Section -->
                     <span>Details</span>
                     <ul style="font-size: 0.8em;">
                       <li>Created: {{ listing.date_create }}</li>

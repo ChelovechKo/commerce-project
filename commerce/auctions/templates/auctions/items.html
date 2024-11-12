@@ -12,6 +12,23 @@
         </div>
 
         <div class="listing-info">
+            <!-- Watchlist -->
+            <div class="d-flex justify-content-end" style="font-size: 0.8em;">
+                {% if user.is_authenticated and listing.is_active%}
+                    {% if listing.id in watchlisted_ids %}
+                        Remove from your watchlist
+                        <a href="{% url 'remove_from_watchlist' listing.id %}?next={{ request.path }}" class="text-decoration-none ml-1">
+                            <img src="{% static 'watchlist_filled_icon.png' %}" alt="remove">
+                        </a>
+                    {% else %}
+                        Add to your watchlist
+                        <a href="{% url 'add_to_watchlist' listing.id %}?next={{ request.path }}" class="text-decoration-none ml-1">
+                            <img src="{% static 'watchlist_empty_icon.png' %}" alt="add">
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+
             <div>
                 <span class="h3 font-weight-bold align-middle">
                      <a href="{% url 'listing_page' listing.id %}">{{ listing.name }}</a>
@@ -25,10 +42,18 @@
             </div>
 
             <p style="font-size: 0.8em;">
-                <span class = "description-text">
-                    {{ listing.description|slice:":60"}}...
+                {% if listing.id in expanded_listing_ids %}
+                    {{ listing.description }}
+                {% else %}
+                    <span class = "description-text">
+                        {{ listing.description|slice:":60"}}...
+                    </span>
+                {% endif %}
+                <span>
+                    <a href="{% url 'expand_description' listing.id %}?next={{ request.path }}" class="align-middle" style="font-size: 0.8em;">
+                        {% if listing.id in expanded_listing_ids %}show less{% else %}read more{% endif %}
+                    </a>
                 </span>
-                <span><a href="{% url 'listing_page' listing.id %}" class="align-middle" style="font-size: 0.8em;">read more</a></span>
             </p>
 
             <p>Price: {{ listing.price}} <img src="{% static 'septim.png' %}" alt="Septim"></p>
