@@ -6,8 +6,8 @@ from django.conf import settings
 
 
 class User(AbstractUser):
-    FACTION_CHOICES = [
-        ("", "— No faction —"),
+    FRACTION_CHOICES = [
+        ("", "— No fraction —"),
         ("College of Winterhold", "College of Winterhold"),
         ("Dark Brotherhood", "Dark Brotherhood"),
         ("Thieves Guild", "Thieves Guild"),
@@ -20,7 +20,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=100, null=False, unique=True)
     email = models.EmailField(unique=True, null=False)
     password = models.CharField(max_length=255, null=False)
-    faction = models.CharField(max_length=100, choices=FACTION_CHOICES, blank=True, null=True)
+    fraction = models.CharField(max_length=100, choices=FRACTION_CHOICES, blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
     def __str__(self):
