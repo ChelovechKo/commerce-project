@@ -221,6 +221,8 @@ textarea:focus {
 
 .listing-detailed-item {
     min-height: 400px;
+    min-width: 900px;
+    max-width: 1300px;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -241,7 +243,7 @@ textarea:focus {
 
 .listing-detailed-content {
     display: flex;
-    width: 83%;
+    width: 80%;
     height: 85%;
     margin: auto;
 }
