@@ -105,6 +105,7 @@ def watchlist_view(request):
     expanded_listing_ids = request.session.get('expanded_listing_ids', [])
 
     return render(request, "auctions/watchlist.html", {
+        "active_tab": "watchlist",
         "listings": watchlisted_listings,
         "watchlisted_ids": watchlisted_ids,
         "expanded_listing_ids": expanded_listing_ids,
@@ -234,3 +235,14 @@ def expand_description_view(request, listing_id):
     request.session['expanded_listing_ids'] = expanded_ids
     next_url = request.GET.get('next')
     return redirect(next_url) if next_url else redirect(reverse("index"))
+
+def personal_listing_view(request):
+    '''Displays listings that the user created'''
+    personal_listing = Listing.objects.filter(user_create=request.user)
+    expanded_listing_ids = request.session.get('expanded_listing_ids', [])
+
+    return render(request, "auctions/personal_listing.html", {
+        "active_tab": "personal_listing",
+        "personal_listing": personal_listing,
+        "expanded_listing_ids": expanded_listing_ids,
+    })

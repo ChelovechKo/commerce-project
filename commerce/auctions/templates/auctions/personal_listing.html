@@ -1,0 +1,33 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block title %}Personal Lisings{% endblock %}
+
+{% block body %}
+
+    {% if user.is_authenticated %}
+        {% if personal_listing %}
+            <div class="listings-container">
+                {% for listing in personal_listing %}
+                    {% include "auctions/items.html" with listing=listing %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="listings-container">
+                <div class="listing-item">
+                    <div class="listing-content">
+                        <p class="align-middle text-center">You haven't <a href="{% url 'create_listing' %}">created</a> any listing.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="listings-container">
+            <div class="listing-item">
+                <div class="listing-content">
+                    <p>Return to your path <a href="{% url 'login' %}">here</a> to watch your watchlist.</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
