@@ -82,8 +82,8 @@ form {
     max-width: 400px;
 }
 
-input.form-control {
-    color: #7b2d2c;
+.form-control {
+    color: #5d4f42;
     font-style: italic;
     font-weight: bold;
     background-color: transparent;
@@ -92,14 +92,21 @@ input.form-control {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .form-control::placeholder {
-    color: #c2a487;
+    color: #5d4f42;
 }
-input.form-control:focus{
+.form-control:focus{
     outline: none;
     border: 2px solid #7b2d2c;
-    color: #7b2d2c;
+    color: #5d4f42;
     box-shadow: 0 0 5px #5c2a2a;
     background-color: transparent;
+}
+
+.form-control option {
+    background-color: transparent;
+    color: #5d4f42;
+    font-style: italic;
+    font-weight: bold;
 }
 
 textarea {
@@ -116,7 +123,7 @@ textarea {
 }
 
 textarea::placeholder {
-    color: #c2a487;
+    color: #5d4f42;
 }
 
 textarea:focus {
@@ -212,7 +219,27 @@ textarea:focus {
     background-repeat: no-repeat;
 }
 
+.listing-detailed-item {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+    padding: 80px 40px;
+    background-image: url("scroll.png");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .listing-content {
+    display: flex;
+    width: 83%;
+    height: 85%;
+    margin: auto;
+}
+
+.listing-detailed-content {
     display: flex;
     width: 83%;
     height: 85%;
@@ -233,6 +260,7 @@ textarea:focus {
 
 .image-container img {
     width: 100%;
+    max-height: 200px;
     object-fit: contain;
     display: block;
 }

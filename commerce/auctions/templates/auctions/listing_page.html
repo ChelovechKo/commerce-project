@@ -4,20 +4,23 @@
 
 {% block body %}
    <div class="listings-container">
-        <div class="listing-item">
+        <div class="listing-detailed-item">
             <!-- Listing Content: Image and Info -->
-
-            <div class="listing-content">
+            <div class="listing-detailed-content">
                 {% if not listing.is_active %}
                     {% if user == listing.user_win %}
-                        <span class="h3 font-weight-bold text-success">Congratulations! You won this auction!</span>
+                        <span class="h3 font-weight-bold text-success text-center">
+                            <img src="{% static 'laurel_wreath.png' %}" alt="Laurel wreath" class="mr-1">
+                                Congratulations! You won this auction!
+                            <img src="{% static 'laurel_wreath.png' %}" alt="Laurel wreath" class="ml-1">
+                        </span>
                     {% else %}
-                        <span class="h3 font-weight-bold text-danger">This auction is closed.</span>
+                        <span class="h3 font-weight-bold text-danger text-center">This auction is closed.</span>
                     {% endif %}
                 {% endif %}
             </div>
 
-            <div class="listing-content">
+            <div class="listing-detailed-content">
                 <!-- Image -->
                 <div class="image-container">
                     {% if listing.img %}
@@ -88,18 +91,18 @@
                 </div>
             </div>
 
-            <div class="listing-content">
+            <div class="listing-detailed-content">
                 <!-- Comments Section -->
                 <div class="listing-comments">
-                    <span class="h3 font-weight-bold align-middle">Comments</span>
+                    <span class="h3 font-weight-bold align-middle">Traveler's Voices:</span>
                     {% if user.is_authenticated %}
                         <form method="post" action="{% url 'add_comment' listing.id %}">
                             {% csrf_token %}
-                            <textarea name="comment_text" rows="3" placeholder="Add your comment here..." required></textarea>
-                            <button type="submit" class="btn_stl">Post Comment</button>
+                            <textarea name="comment_text" rows="3" placeholder="Leave your wisdom behind..." required></textarea>
+                            <button type="submit" class="btn_stl">Complete the Entry</button>
                         </form>
                     {% else %}
-                        <p>Please <a href="{% url 'login' %}">log in</a> to post comments.</p>
+                        <p><a href="{% url 'login' %}">Enter</a>, wanderer, to leave your words in the chronicles.</p>
                     {% endif %}
 
                     <div class="comments-list mt-3">
@@ -110,7 +113,7 @@
                                 <hr>
                             </div>
                         {% empty %}
-                            <p>No comments yet. Be the first to comment!</p>
+                            <p>The pages lie empty, without a single word... Leave your tale here.</p>
                         {% endfor %}
                     </div>
                 </div>
