@@ -6,9 +6,11 @@ from django.contrib import messages
 from django.urls import reverse
 
 from .models import User, Listing, Watchlist, Category, Bid, Comment
-from .forms import ListingForm
+from .forms import ListingForm, SignupForm
+
 
 def login_view(request):
+    '''Login'''
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -32,35 +34,26 @@ def logout_view(request):
     return redirect(reverse("index"))
 
 def signup_view(request):
+    '''Sign up for new user'''
     if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
-        fraction = request.POST["fraction"]
-        avatar = request.FILES.get("avatar")
+        form = SignupForm(request.POST, request.FILES)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            avatar = form.cleaned_data.get('avatar')
+            fraction = form.cleaned_data.get('fraction')
 
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(request, "auctions/signup.html", {
-                "message": "Passwords must match."
-            })
-
-        # Attempt to create new user
-        try:
             user = User.objects.create_user(username=username, email=email, password=password)
             user.fraction = fraction
             if avatar:
                 user.avatar = avatar
             user.save()
-        except IntegrityError:
-            return render(request, "auctions/signup.html", {
-                "message": "Username already taken."
-            })
-        login(request, user)
-        return redirect(reverse("index"))
+            login(request, user)
+            return redirect(reverse("index"))
     else:
-        return render(request, "auctions/signup.html")
+        form = SignupForm()
+    return render(request, "auctions/signup.html", {'form': form})
 
 def index(request):
     '''Displays all active listings'''
@@ -100,9 +93,13 @@ def categories_view(request, category_id=None):
 
 def watchlist_view(request):
     '''Displays listings that the user has added to their watchlist'''
-    watchlisted_listings = Listing.objects.filter(watchlisted_by__user=request.user)
-    watchlisted_ids = watchlisted_listings.values_list('id', flat=True)
-    expanded_listing_ids = request.session.get('expanded_listing_ids', [])
+    watchlisted_listings = []
+    watchlisted_ids = []
+    expanded_listing_ids = []
+    if request.user.is_authenticated:
+        watchlisted_listings = Listing.objects.filter(watchlisted_by__user=request.user)
+        watchlisted_ids = watchlisted_listings.values_list('id', flat=True)
+        expanded_listing_ids = request.session.get('expanded_listing_ids', [])
 
     return render(request, "auctions/watchlist.html", {
         "active_tab": "watchlist",
@@ -155,7 +152,7 @@ def listing_page_view(request, listing_id):
     else:
         message = f'The current bid belongs to {last_bid.user}.'
 
-    # Проверка на отправку формы ставки
+    # Check
     if request.method == "POST":
         new_bid_price = request.POST["bid_price"]
         if new_bid_price:
@@ -182,6 +179,7 @@ def listing_page_view(request, listing_id):
 
 @login_required
 def add_to_watchlist_view(request, listing_id):
+    '''Add to watchlist'''
     listing = get_object_or_404(Listing, id=listing_id)
     Watchlist.objects.get_or_create(user=request.user, listing=listing)
     next_url = request.GET.get('next')
@@ -189,6 +187,7 @@ def add_to_watchlist_view(request, listing_id):
 
 @login_required
 def remove_from_watchlist_view(request, listing_id):
+    '''Remove from watchlist'''
     listing = get_object_or_404(Listing, id=listing_id)
     Watchlist.objects.filter(user=request.user, listing=listing).delete()
     next_url = request.GET.get('next')
@@ -197,6 +196,7 @@ def remove_from_watchlist_view(request, listing_id):
 
 @login_required
 def add_comment_view(request, listing_id):
+    '''Add comment'''
     listing = get_object_or_404(Listing, id=listing_id)
 
     if request.method == "POST":
@@ -212,6 +212,7 @@ def add_comment_view(request, listing_id):
 
 @login_required
 def close_auction_view(request, listing_id):
+    '''Close auction'''
     listing = get_object_or_404(Listing, id=listing_id)
 
     if listing.user_create != request.user:
@@ -226,6 +227,7 @@ def close_auction_view(request, listing_id):
     return redirect('listing_page', listing_id=listing.id)
 
 def expand_description_view(request, listing_id):
+    '''Expansion description on not-detailed pages'''
     expanded_ids = request.session.get('expanded_listing_ids', [])
     if listing_id not in expanded_ids:
         expanded_ids.append(listing_id)
@@ -238,8 +240,12 @@ def expand_description_view(request, listing_id):
 
 def personal_listing_view(request):
     '''Displays listings that the user created'''
-    personal_listing = Listing.objects.filter(user_create=request.user)
-    expanded_listing_ids = request.session.get('expanded_listing_ids', [])
+
+    personal_listing = []
+    expanded_listing_ids = []
+    if request.user.is_authenticated:
+        personal_listing = Listing.objects.filter(user_create=request.user, is_active=True)
+        expanded_listing_ids = request.session.get('expanded_listing_ids', [])
 
     return render(request, "auctions/personal_listing.html", {
         "active_tab": "personal_listing",
