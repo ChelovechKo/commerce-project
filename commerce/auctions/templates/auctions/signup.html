@@ -10,38 +10,7 @@
             <h2 class="text-center">Sign up, Stranger</h2>
             <form action="{% url 'signup' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-group">
-                    <input class="form-control" autofocus type="text" name="username" placeholder="Name">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="email" name="email" placeholder="Letter box">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-                </div>
-                <div class="form-group">
-                    <label for="fraction">Choose your fraction</label>
-                    <select class="form-control" name="fraction" id="fraction">
-                        <option value="" selected>— No fraction —</option>
-                        <option value="College of Winterhold">College of Winterhold</option>
-                        <option value="Dark Brotherhood">Dark Brotherhood</option>
-                        <option value="Thieves Guild">Thieves Guild</option>
-                        <option value="Companions">Companions</option>
-                        <option value="Imperial Legion">Imperial Legion</option>
-                        <option value="Stormcloaks">Stormcloaks</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="avatar">Show us yourself</label>
-                    <div class="custom-file-upload">
-                        <label for="avatar" class="btn_stl">Choose File</label>
-                        <span id="file-name">No file chosen</span>
-                        <input type="file" name="avatar" id="avatar" class="form-control-file" style="display: none;">
-                    </div>
-                </div>
+                {{ form.as_p }}
                 <button class="btn_stl btn-block" type="submit">Enter here</button>
             </form>
 
