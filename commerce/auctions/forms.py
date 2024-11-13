@@ -4,17 +4,30 @@ from .models import Listing, Category
 class ListingForm(forms.ModelForm):
     category = forms.ModelChoiceField(
         queryset=Category.objects.all(),
-        empty_label="-- Select a category --"
+        empty_label="-- Select a category --",
+        label='',
+        widget=forms.Select(attrs={'class': 'form-control', 'style': 'max-width: 100%;'}),
+    )
+
+    price = forms.DecimalField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter starting price'}),
+        required=True,
+        label=''
     )
 
     class Meta:
         model = Listing
-        fields = ['name', 'description', 'price', 'img', 'category']
+        fields = ['name', 'description', 'price', 'category', 'img']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter listing title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter description'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter starting price'}),
-            'img': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'img': forms.ClearableFileInput(attrs={'class': 'btn_stl', 'style': 'max-width: 100%;'}),
+        }
+        labels = {
+            'name': '',
+            'description': '',
+            'price': '',
+            'img': 'Choose your trade picture'
         }
 
 class SignupForm(forms.Form):
@@ -33,10 +46,14 @@ class SignupForm(forms.Form):
             ('Imperial Legion', 'Imperial Legion'),
             ('Stormcloaks', 'Stormcloaks'),
         ],
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        widget=forms.Select(attrs={'class': 'form-control', 'style': 'max-width: 100%;'}),
         required=False
     )
-    avatar = forms.ImageField(label = 'Show us yourself', required=False)
+    avatar = forms.ImageField(
+        label = 'Show us yourself',
+        required=False,
+        widget=forms.ClearableFileInput(attrs={'class': 'btn_stl', 'style': 'max-width: 100%;'})
+    )
 
     def clean(self):
         cleaned_data = super().clean()

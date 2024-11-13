@@ -80,7 +80,7 @@
                                 <form method="post" action="{% url 'listing_page' listing.id %}" class="d-flex align-items-center">
                                 {% csrf_token %}
                                 <input class="form-control" type="number" name="bid_price" step="1" min="{{ max_price|add:"0" }}"
-                                       placeholder="{{ max_price|add:"0" }}" required>
+                                       placeholder="{{ max_price|add:"0" }}" value="{{ max_price|add:"0" }}" required>
                                 <button type="submit" class="btn_stl" style="transform: scale(0.9);">Place Bid</button>
                             </form>
                             {% endif %}

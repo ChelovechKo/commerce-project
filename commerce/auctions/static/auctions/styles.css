@@ -9,12 +9,9 @@ a {
     text-decoration: underline;
     cursor: pointer;
 }
-
 a:hover {
     color: #5d4f42;
 }
-
-
 
 /* -----=====buttons=====----- */
 
@@ -103,12 +100,16 @@ form {
     box-shadow: 0 0 5px #5c2a2a;
     background-color: transparent;
 }
-
 .form-control option {
     background-color: transparent;
     color: #5d4f42;
     font-style: italic;
     font-weight: bold;
+}
+.form-control option:checked,
+.form-control option:hover {
+    background-color: transparent;
+    color: #5c2a2a;
 }
 
 textarea {
@@ -245,6 +246,7 @@ textarea:focus {
     width: 83%;
     height: 85%;
     margin: auto;
+    justify-content: center;
 }
 
 .listing-detailed-content {

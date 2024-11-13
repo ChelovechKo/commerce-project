@@ -3,17 +3,24 @@
 {% block title %}Create Listing{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="notice">
-            {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
+        <div class="container">
+            <div class="notice">
                 <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn_stl mt-3">Create Listing</button>
-            </form>
-            {% else %}
-                <p>Return to your path <a href="{% url 'login' %}">here</a> to create listing.</p>
-            {% endif %}
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn_stl btn-block">Create Listing</button>
+                </form>
+            </div>
         </div>
-    </div>
+    {% else %}
+        <div class="listings-container">
+            <div class="listing-item">
+                <div class="listing-content">
+                    <p>Return to your path <a href="{% url 'login' %}">here</a> to create listing.</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
 {% endblock %}
