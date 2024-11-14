@@ -11,11 +11,11 @@
                     {% if user == listing.user_win %}
                         <span class="h3 font-weight-bold text-success text-center">
                             <img src="{% static 'laurel_wreath.png' %}" alt="Laurel wreath" class="mr-1 small-icon">
-                                You won this auction!
+                                You won this listing!
                             <img src="{% static 'laurel_wreath.png' %}" alt="Laurel wreath" class="ml-1 small-icon">
                         </span>
                     {% else %}
-                        <span class="h3 font-weight-bold text-danger text-center">This auction is closed</span>
+                        <span class="h3 font-weight-bold text-danger text-center">This listing is closed</span>
                     {% endif %}
                 {% endif %}
             </div>

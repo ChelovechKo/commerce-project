@@ -75,8 +75,12 @@ def categories_view(request, category_id=None):
         then we display active listings of this category,
         if the category is not selected,
         then we display all active listings'''
-
     categories = Category.objects.all()
+    watchlisted_ids = []
+    expanded_listing_ids = request.session.get('expanded_listing_ids', [])
+    if request.user.is_authenticated:
+        watchlisted_ids = request.user.watchlist.values_list('listing_id', flat=True)
+
     if category_id:
         selected_category = get_object_or_404(Category, id=category_id)
         listings = Listing.objects.filter(category=selected_category, is_active=True)
@@ -88,6 +92,8 @@ def categories_view(request, category_id=None):
         "categories": categories,
         "listings": listings,
         "selected_category": selected_category,
+        "watchlisted_ids": watchlisted_ids,
+        "expanded_listing_ids": expanded_listing_ids,
     })
 
 def watchlist_view(request):
@@ -243,7 +249,7 @@ def personal_listing_view(request):
     personal_listing = []
     expanded_listing_ids = []
     if request.user.is_authenticated:
-        personal_listing = Listing.objects.filter(user_create=request.user, is_active=True)
+        personal_listing = Listing.objects.filter(user_create=request.user).order_by('-is_active')
         expanded_listing_ids = request.session.get('expanded_listing_ids', [])
 
     return render(request, "auctions/personal_listing.html", {
