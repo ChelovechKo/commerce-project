@@ -296,4 +296,10 @@ textarea:focus {
     padding: 20px;
 }
 
+.small-icon {
+    height: 1em;
+    width: auto;
+    vertical-align: middle;
+}
+
 /* -----=====----=====----- */

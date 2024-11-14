@@ -6,16 +6,16 @@
    <div class="listings-container d-flex justify-content-center">
         <div class="listing-detailed-item">
             <!-- Listing Content: Image and Info -->
-            <div class="listing-detailed-content">
+            <div class="listing-detailed-content d-flex justify-content-center">
                 {% if not listing.is_active %}
                     {% if user == listing.user_win %}
                         <span class="h3 font-weight-bold text-success text-center">
-                            <img src="{% static 'laurel_wreath.png' %}" alt="Laurel wreath" class="mr-1">
-                                Congratulations! You won this auction!
-                            <img src="{% static 'laurel_wreath.png' %}" alt="Laurel wreath" class="ml-1">
+                            <img src="{% static 'laurel_wreath.png' %}" alt="Laurel wreath" class="mr-1 small-icon">
+                                You won this auction!
+                            <img src="{% static 'laurel_wreath.png' %}" alt="Laurel wreath" class="ml-1 small-icon">
                         </span>
                     {% else %}
-                        <span class="h3 font-weight-bold text-danger text-center">This auction is closed.</span>
+                        <span class="h3 font-weight-bold text-danger text-center">This auction is closed</span>
                     {% endif %}
                 {% endif %}
             </div>
