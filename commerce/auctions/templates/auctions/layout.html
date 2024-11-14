@@ -10,9 +10,11 @@
     </head>
     <body>
         <nav class="border_notice_board navbar navbar-expand-lg navbar-dark">
-            <img src="{% static 'site_icon.png' %}" class="mr-2" width="50" height="50">
-            <a class="navbar-brand" style="text-decoration: none;" href="{% url 'index' %}">Tamriel Auctions</a>
-            <div class="collapse navbar-collapse justify-content-end">
+            <div class="d-flex align-items-center">
+                <img src="{% static 'site_icon.png' %}" class="mr-2" width="50" height="50">
+                <a class="navbar-brand mb-0" style="text-decoration: none;" href="{% url 'index' %}">Tamriel Auctions</a>
+            </div>
+            <div class="ml-auto d-flex align-items-center">
                 {% if user.is_authenticated %}
                     <span class="navbar-text mr-3">
                         Signed in as <strong>{{ user.username }}</strong>
