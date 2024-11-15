@@ -92,8 +92,11 @@
                     <!-- Details Section -->
                     <span>Details</span>
                     <ul style="font-size: 0.8em;">
-                      <li>Created: {{ listing.date_create }}</li>
+                      <li>Create Date: {{ listing.date_create }}</li>
                       <li>Created by: {{ listing.user_create }}</li>
+                        {% if listing.user_win %}
+                            <li>Won by: {{ listing.user_win }}</li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -115,7 +118,7 @@
                     <div class="comments-list mt-3">
                         {% for comment in comments %}
                             <div class="comment-item">
-                                <p style="font-size: 0.8em;">{{ comment.user.username }} — {{ comment.create_date|date:"M d, Y H:i" }}</p>
+                                <p style="font-size: 0.8em; text-decoration: underline;">{{ comment.user.username }} — {{ comment.create_date|date:"M d, Y H:i" }}</p>
                                 <p class="ml-3">{{ comment.description }}</p>
                                 <hr>
                             </div>

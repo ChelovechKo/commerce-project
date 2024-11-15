@@ -73,10 +73,14 @@
                 <p>Price: {{ listing.price}} <img src="{% static 'septim.png' %}" alt="Septim"></p>
 
                 <span><u>Details</u></span>
-                        <ul style="font-size: 0.8em;">
-                          <li>Created: {{ listing.date_create }}</li>
-                          <li>Created by: {{ listing.user_create }}</li>
-                        </ul>
+                <ul style="font-size: 0.8em;">
+                    <li>Create Date: {{ listing.date_create }}</li>
+                    <li>Created by: {{ listing.user_create }}</li>
+                    {% if listing.user_win %}
+                            <li>Won by: {{ listing.user_win }}</li>
+                        {% endif %}
+                    </ul>
+                </ul>
             </div>
         </div>
     </div>
