@@ -127,7 +127,7 @@ def create_listing_view(request):
             # Create the first = new_listing.price
             Bid.objects.create(user=request.user, listing=new_listing, price=new_listing.price)
 
-            return redirect(reverse("index"))
+            return redirect(reverse("listing_page", kwargs={"listing_id": new_listing.id}))
     else:
         form = ListingForm()
 
