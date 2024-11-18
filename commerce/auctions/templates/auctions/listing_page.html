@@ -37,12 +37,12 @@
                         {% if user.is_authenticated and listing.is_active%}
                             {% if is_watchlisted %}
                                 Remove from your watchlist
-                                <a href="{% url 'remove_from_watchlist' listing.id %}" class="text-decoration-none ml-1">
+                                <a href="{% url 'remove_from_watchlist' listing.id %}?next={{ request.path }}" class="text-decoration-none ml-1">
                                     <img src="{% static 'watchlist_filled_icon.png' %}" alt="remove">
                                 </a>
                             {% else %}
                                 Add to your watchlist
-                                <a href="{% url 'add_to_watchlist' listing.id %}" class="text-decoration-none ml-1">
+                                <a href="{% url 'add_to_watchlist' listing.id %}?next={{ request.path }}" class="text-decoration-none ml-1">
                                     <img src="{% static 'watchlist_empty_icon.png' %}" alt="add">
                                 </a>
                             {% endif %}
